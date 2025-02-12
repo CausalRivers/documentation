@@ -80,7 +80,7 @@ Additionally, the meta data table contains information on the individual nodes.
 Further, both ground truth graph and edges hold additional informations.
 
 
-For nodes:
+### For nodes:
 - p: (X,Y coordinates)
 - c: (color for consistency based on origin)
 - origin: (origin of the node)
@@ -93,7 +93,7 @@ For nodes:
 - QY: as above
 - QR: as above
 
-For edges: 
+### For edges: 
 - h_distance: elevation change that appears between the two nodes
 - km: euclidean distance between the two nodes
 - quality_km: quality of the estimation. This depends on QX and QY of the nodes
@@ -106,13 +106,13 @@ Quuality markers:
 
 As the graph construction and especially the edge determination is consisting of multiple strategies, we provide quality markers for each information. Quality markers are defined as follows: 
 
-For nodes: 
+### For nodes: 
 - -1: unknown as target value missing
 - 0: original value
 - Bigger than 0: Value that was estimated or looked up by hand. (Check construction pipeline for more details)
 
 
-For edges: 
+### For edges: 
 - origin: The step under which the edge was added. E.g. origin 6 references to edges that were added as river splits by hand.
 - quality_h: Sum of the quality of the corresponding Heights estimated of the connected nodes. E.g. 0 references that both height estimates were not estimated.
 - quality_km: Sum of the quality of the corresponding coordinates(X,Y) estimated of the connected nodes. E.g. 0 references that both  coordinates were not estimated.
