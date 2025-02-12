@@ -7,9 +7,9 @@ import networkx as nx
 
 import matplotlib as mpl
 
-preprocess_path = '/home/datasets4/stein/rivers/processed/'
-output_path = '/home/datasets4/stein/rivers/processed_recreation/'
-crawl_path = "/home/datasets4/stein/rivers/crawl_saves/"
+preprocess_path = ''
+output_path = ''
+crawl_path = ''
 
 
 def get_elevation_of_point(coords):

@@ -1,8 +1,8 @@
 import requests
 import numpy as np
 
-processed_path = "/home/datasets4/stein/rivers/processed_recreation/"
-crawl_path = "/home/datasets4/stein/rivers/crawl_saves/"
+processed_path = ''
+crawl_path = ''
 
 def get_elevation_of_point(coords):
     # api-endpoint

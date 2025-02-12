@@ -1,5 +1,5 @@
 import requests
-crawl_path = "/home/datasets4/stein/rivers/crawl_saves_reproduce/"
+crawl_path = ''
 
 
 def get_elevation_of_point(coords):
