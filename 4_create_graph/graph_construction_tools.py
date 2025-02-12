@@ -1,14 +1,12 @@
 import numpy as np
 
 
-
 def distance(c1, c2):
     # Conversion X, Y to km distance (considering curvature)
     deglen = 110.25
     x = c1[0] - c2[0]
-    y = (c1[1] - c2[1])*np.cos(c1[0])
-    return deglen*np.sqrt(x*x + y*y)
-
+    y = (c1[1] - c2[1]) * np.cos(c1[0])
+    return deglen * np.sqrt(x * x + y * y)
 
 
 def find_river_flow_edges(lab):
@@ -20,40 +18,50 @@ def find_river_flow_edges(lab):
             c1 = single_river["D"].isnull().sum() == 0
             c2 = (single_river["D"] < 0).sum() == len(single_river)
             c3 = (single_river["D"] > 0).sum() == len(single_river)
-            c4= len(single_river["O"].unique()) == 1
+            c4 = len(single_river["O"].unique()) == 1
             if c1 and c4 and (c2 or c3):
                 single_river.sort_values(["D", "H"], ascending=False, inplace=True)
             else:
                 single_river.sort_values(["H", "D"], ascending=False, inplace=True)
             single_river.reset_index(inplace=True)
 
-
             if len(single_river) > 0:
 
                 for x in range(len(single_river) - 1):
                     lab.loc[single_river.iloc[x].ID, "Child found"] = 1
 
-                    # same sign
-                    if (single_river.iloc[x]["D"] * single_river.iloc[x+1]["D"]) >0:
-                        distance_between = np.abs(single_river.iloc[x]["D"]- single_river.iloc[x + 1]["D"])
+                    # # same sign
+                    # if (single_river.iloc[x]["D"] * single_river.iloc[x+1]["D"]) >0:
+                    #     distance_between = np.abs(single_river.iloc[x]["D"]- single_river.iloc[x + 1]["D"])
 
+                    # elif np.isnan(single_river.iloc[x]["D"]) or np.isnan(single_river.iloc[x+1]["D"]):
+                    #     distance_between = None
+                    # else:
+                    #     print("weird Distance combo detected.")
+                    #     distance_between = None
+                    #     print(x)
 
-                    elif np.isnan(single_river.iloc[x]["D"]) or np.isnan(single_river.iloc[x+1]["D"]):
-                        distance_between = None
-                    else:
-                        print("weird Distance combo detected.")
-                        distance_between = None
-                        print(x)
+                    dist = eucl(
+                        single_river.iloc[x]["X"],
+                        single_river.iloc[x + 1]["X"],
+                        single_river.iloc[x]["Y"],
+                        single_river.iloc[x + 1]["Y"],
+                    )
 
                     edges.append(
                         (
                             single_river.iloc[x].ID,
                             single_river.iloc[x + 1].ID,
                             {
-                                "km": distance_between,
-                                "h_distance": single_river.iloc[x]["H"]- single_river.iloc[x + 1]["H"],
-                                "quality_km":single_river.iloc[x]["QD"] + single_river.iloc[x+1]["QD"],
-                                "quality_h": single_river.iloc[x]["QH"] + single_river.iloc[x+1]["QH"],
+                                "km": dist,
+                                "h_distance": single_river.iloc[x]["H"]
+                                - single_river.iloc[x + 1]["H"],
+                                "quality_km": single_river.iloc[x]["QX"]
+                                + single_river.iloc[x + 1]["QX"]
+                                + single_river.iloc[x + 1]["QY"]
+                                + single_river.iloc[x + 1]["QY"],
+                                "quality_h": single_river.iloc[x]["QH"]
+                                + single_river.iloc[x + 1]["QH"],
                                 "origin": 1,
                             },
                         )
@@ -147,78 +155,13 @@ def eucl(X1, X2, Y1, Y2):
 
 def create_edge(parent_node, relevant_nodes, lab, crossing_coords, origin=2):
     child_node = relevant_nodes.index[0]
-    # TODO Distance not correct. should be + distance
-    # to next station from crossing (unkwown.) (estimate?)
 
-    # We have to estimate the distance as we do know the exact river flow.
-    # Some options here:
-
-    # For Parent to crossing:
-    # We either have the distance to the ending value or
-    # we need to estimate from coordinates (as the distances
-    # specifies the distance from the start, notes as negative)
-
-    # For Crossing to next marking:
-    # We estimate from coordinates. This is for sure a lower bound.
-
-    # We mark 2 if we are precise in 1 direction and 3 if both parts are estimated, 4 if there is no crossing specified.
-    # if crossing_coords:
-    #     if len(crossing_coords) == 2:
-
-    #         if lab.loc[parent_node, "D"] > 0:
-    #             first_part = lab.loc[parent_node, "D"]
-    #             quality = 2
-    #         else:
-    #             first_part = eucl(
-    #                 lab.loc[parent_node, "X"],
-    #                 float(crossing_coords[0]),
-    #                 lab.loc[parent_node, "Y"],
-    #                 float(crossing_coords[1]),
-    #             )
-    #             quality = 3
-
-    #         second_part = eucl(
-    #             float(crossing_coords[0]),
-    #             lab.loc[child_node, "X"],
-    #             float(crossing_coords[1]),
-    #             lab.loc[child_node, "Y"],
-    #         )
-    #         dist = first_part + second_part
-
-    #     elif len(crossing_coords) == 4:
-    #         # double crossings.
-    #         if lab.loc[parent_node, "D"] > 0:
-    #             first_part = lab.loc[parent_node, "D"]
-    #             quality = 4
-    #         else:
-    #             first_part = eucl(
-    #                 lab.loc[parent_node, "X"],
-    #                 float(crossing_coords[0]),
-    #                 lab.loc[parent_node, "Y"],
-    #                 float(crossing_coords[1]),
-    #             )
-    #             quality = 5
-
-    #         second_part = eucl(
-    #             float(crossing_coords[0]),
-    #             float(crossing_coords[2]),
-    #             float(crossing_coords[1]),
-    #             float(crossing_coords[3]),
-    #         )
-    #         third_part = eucl(
-    #             float(crossing_coords[2]),
-    #             lab.loc[child_node, "X"],
-    #             float(crossing_coords[3]),
-    #             lab.loc[child_node, "Y"],
-    #         )
-    #         dist = first_part + second_part + third_part
-    # else:
     dist = eucl(
         lab.loc[parent_node, "X"],
         lab.loc[child_node, "X"],
         lab.loc[parent_node, "Y"],
         lab.loc[child_node, "Y"],
-    )  
+    )
 
     return (
         parent_node,
@@ -226,7 +169,10 @@ def create_edge(parent_node, relevant_nodes, lab, crossing_coords, origin=2):
         {
             "h_distance": lab.loc[parent_node, "H"] - relevant_nodes["H"].values[0],
             "km": dist,
-            "quality_km":lab.loc[parent_node, "QD"] + relevant_nodes["QD"].values[0],
+            "quality_km": lab.loc[parent_node, "QX"]
+            + lab.loc[parent_node, "QY"]
+            + lab.loc[child_node, "QX"]
+            + lab.loc[child_node, "QY"],
             "quality_h": lab.loc[parent_node, "QH"] + relevant_nodes["QH"].values[0],
             "origin": origin,
         },
@@ -257,7 +203,9 @@ def find_river_crossing(id, lab, G, big_rivers):
         return None, 5
 
     # Sort and find the node behind.
-    relevant_nodes = next_river[next_river["H"] <= H].sort_values(["H", "D"], ascending=False)
+    relevant_nodes = next_river[next_river["H"] <= H].sort_values(
+        ["H", "D"], ascending=False
+    )
     if len(relevant_nodes) > 0:
         return create_edge(parent_node, relevant_nodes, lab, crossing_coords), -1
     else:
@@ -298,10 +246,12 @@ def add_handcrafted_information(
             if (child in lab["R"].values) or (child.split(" (")[0] in lab["R"].values):
                 next_river = lab[lab["R"] == child]
                 relevant_nodes = next_river[next_river["H"] <= H].sort_values(
-                    ["H","D"], ascending=False
+                    ["H", "D"], ascending=False
                 )
                 if len(relevant_nodes) > 0:
-                    edge = create_edge(index, relevant_nodes, lab, crossing_coords,origin=origin)
+                    edge = create_edge(
+                        index, relevant_nodes, lab, crossing_coords, origin=origin
+                    )
                     remain.loc[index, "Child found"] = 1
                     to_add.append(edge)
                     used_edges.append(list(additional_edges[match[0]]))
