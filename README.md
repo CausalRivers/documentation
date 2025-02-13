@@ -1,22 +1,28 @@
-# Construction Pipeline for Rivers East Germany
+# CausalRivers - Documentation
 
-This repo servers mainly for documentary purposes as the raw data is not mostly publicly available.
+## [Paper](https://openreview.net/forum?id=wmV4cIbgl6) | [Project Page](https://causalrivers.github.io/)
 
-The following steps are performed to construct labels and time series for the Rivers East Germany benchmark. Steps are supdivided via numbers and should be executed in oder.
+This repository serves mainly for documentary purposes, providing insight into the data processing pipelines for different states in Germany. Although most of the raw data is not publicly available, documentation is still necessary for understanding how the final graph is built.
 
-- 1_raw_data_processing: Here we perform an initial parse for both time series and meta data for each recieved dataproduct (each state provided data in a different format.)
+If you just want to work, test, or experiment with the dataset and benchmarks please checkout [this repository](https://github.com/CausalRivers/benchmark)!
 
-- 2_wiki_crawls: Here we provide scripts to crawl wikipedia articles to gain information about naming, crossings and coordinates for various rivers.
+## Construction Pipeline for Rivers East Germany
 
-- 3_unify_data_sources: Here we combine all data sources from 1 to a single meta data and a single time series product.
+The following steps are performed to construct labels and time series for the Rivers East Germany benchmark. These steps are subdivided via numbers and should be executed in order.
 
-- 4_create_graph: Here we generate the actual ground truth graph based on subproduct from 3 and 2. Notably this is a dirty process that required a lot of manual labour which is specified in tools/handcrafted_info. Notably there were multiple rounds of quality control to ensure that all links are actually valid. We are quite confident that the graph is highly accurate.
+- [1_raw_data_processing](/1_raw_data_processing): Here, we perform an initial parsing of both time series and metadata for each received data product. Note that each state provided data in a different format.
 
-- After this, we perform some quality control to ensure that all links are actually valid and create some visualization tools.
+- [2_wiki_crawl](/2_wiki_crawl/): Here we provide scripts to crawl wikipedia articles to gain information about naming, crossings and coordinates for various rivers.
 
-- Finally, we add additional edge information to the graph which can be used to subsample the giant graph.
+- [3_unify_data_sources](/3_unify_data_sources/): Here, we provide scripts to crawl Wikipedia articles in order to gather information about naming, crossings, and coordinates for various rivers.
 
-Environment for all the processing can be installed via "construction_env.yml
+- [4_create_graph](/4_create_graph/): Here, we generate the actual ground truth graph based on sub-products from steps 3 and 2. Notably, this is a labor-intensive process that requires a significant amount of manual labor, which is documented in tools/handcrafted_info. Furthermore, we conducted multiple rounds of quality control to ensure that all links are valid. As a result, we are quite confident that the graph is highly accurate.
+
+- Following this, we conduct [quality control](/6_final_quality_control.ipynb) checks to verify that all links are valid and develop [visualization tools](/5_create_maps.ipynb) to facilitate further analysis.
+
+- Lastly, we [add additional edge information](/7_flood_set.ipynb) to the graph which can be used to subsample the giant graph.
+
+To enable processing, please set up the corresponding `Anaconda` environment using the `construction_env.yml` file.
 
 # Currently included in the Dataset
 
