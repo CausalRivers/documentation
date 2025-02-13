@@ -49,62 +49,67 @@ To enable processing, please set up the corresponding `Anaconda` environment usi
 | Lower Saxony                  | <ul><li>Access requested, in active contact </li></ul>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ❌   |
 | Schleswig Holstein            | <ul><li>Access requested, in active contact </li><li>Export will take a while (expect beginning / mid february) and will likely be limited to rivers with a certain size (area in sqm?). This size should be less than the official definition of a river (in distinction from a simple "Fließgewässer"). Data will likely start in the year 2000.</li><li>An overview of the stations including location can be found [here](https://hsi-sh.de/nuis/wafis/pegel/od/pegel.csv)</li></ul>                                                                                                          | ❌   |
 
-## CausalRivers Benchmark Product Explanation
+## CausalRivers Benchmark Dataset Explanation
 
-The product consists out of 3 networkx graphs, .3 meta data tables and 3 time series .csv. They share the same key (ID) to identify which node belongs to which time series.
+The dataset consists of **three** `NetworkX` graph structures, **three** metadata tables, and **three** time series in `CSV` file format.
+To facilitate matching between these different formats, each graph node shares a unique `ID` with its corresponding time series.
 
-Additionally, the meta data table contains information on the individual nodes.
+Additionally, the metadata table contains information about the individual nodes.
 
-- ID: Unique id
-- R: River name
-- X: X coordinate of measurement station
-- Y: Y coordinate of measurement station
-- D: Distance to the end of the river OR (in some cases) distance from the source (these are rare and we encoded them via negative numbers)
-- H: Elevation of measurement station
-- QD: Quality marker of the Distance
-- QH: Quality marker of the Height
-- QX: Quality marker of the X coordinate
-- QY: Quality marker of the Y coordinate
-- QR: Quality marker of the River name
-- O: Origin of the node (data source)
-- original_id: ID of the station in the raw data before unification and reindexing. These can be used, in combination with "0" to find the original station on the online services of the data providers (Ts likely only available for the last couple of weeks)
+| Column Name   | Description                                                                                                                                         |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ID`          | Unique ID                                                                                                                                           |
+| `R`           | River name                                                                                                                                          |
+| `X`           | X coordinate of measurement station (longitude)                                                                                                     |
+| `Y`           | Y coordinate of measurement station (latitude)                                                                                                      |
+| `D`           | Distance to the end of the river (or distance from source, encoded as negative numbers)                                                             |
+| `H`           | Elevation of measurement station                                                                                                                    |
+| `QD`          | Quality marker of the Distance                                                                                                                      |
+| `QH`          | Quality marker of the Height                                                                                                                        |
+| `QX`          | Quality marker of the X coordinate                                                                                                                  |
+| `QY`          | Quality marker of the Y coordinate                                                                                                                  |
+| `QR`          | Quality marker of the River name                                                                                                                    |
+| `O`           | Origin of the node (data source)                                                                                                                    |
+| `original_id` | ID of the station in the raw data before unification and reindexing (can be used to find the original station on online services of data providers) |
 
-Further, both ground truth graph and edges hold additional informations.
+Furthermore, both ground truth nodes and edges (**in the graph**) hold additional informations.
 
-### For nodes
+| Node Attribute | Description                             |
+|----------------|-----------------------------------------|
+| `p`            | X, Y coordinates                        |
+| `c`            | color for consistency based on origin   |
+| `origin`       | origin of the node                      |
+| `H`            | as above                                |
+| `R`            | as above                                |
+| `D`            | as above                                |
+| `QD`           | as above                                |
+| `QH`           | as above                                |
+| `QX`           | as above                                |
+| `QY`           | as above                                |
+| `QR`           | as above                                |
 
-- p: (X,Y coordinates)
-- c: (color for consistency based on origin)
-- origin: (origin of the node)
-- H: as above
-- R: as above
-- D: as above
-- QD: as above
-- QH: as above
-- QX: as above
-- QY: as above
-- QR: as above
+| Edge Attribute | Description                                                            |
+|----------------|------------------------------------------------------------------------|
+| `h_distance`   | elevation change between the two nodes                                 |
+| `km`           | Euclidean distance between the two nodes                               |
+| `quality_km`   | quality of the distance estimation (depends on QX and QY of the nodes) |
+| `quality_h`    | quality of the elevation estimation (depends on QH of the nodes)       |
+| `origin`       | strategy used to create this edge (see below for further information)  |
 
-### For edges
+### Quality Values
 
-- h_distance: elevation change that appears between the two nodes
-- km: euclidean distance between the two nodes
-- quality_km: quality of the estimation. This depends on QX and QY of the nodes
-- quality_h:  quality of the estimation. This depends on QH nodes
-- origin: Through which strategy this edge was created. Further info below.
+The graph construction, particularly the edge determination, involves multiple strategies.
+To ensure transparency and reliability, we provide quality markers for each piece of information.
+These quality markers are defined as follows:
 
-### Quuality markers
+| Node Value     | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| `-1`           | Unknown as target value missing                                             |
+| `0`            | Original value                                                              |
+| `> 0`          | Value that was estimated or looked up by hand (Check construction pipeline for more details) |
 
-As the graph construction and especially the edge determination is consisting of multiple strategies, we provide quality markers for each information. Quality markers are defined as follows:
-
-### For nodes
-
-- -1: unknown as target value missing
-- 0: original value
-- Bigger than 0: Value that was estimated or looked up by hand. (Check construction pipeline for more details)
-
-### For edges
-
-- origin: The step under which the edge was added. E.g. origin 6 references to edges that were added as river splits by hand.
-- quality_h: Sum of the quality of the corresponding Heights estimated of the connected nodes. E.g. 0 references that both height estimates were not estimated.
-- quality_km: Sum of the quality of the corresponding coordinates(X,Y) estimated of the connected nodes. E.g. 0 references that both  coordinates were not estimated.
+| Edge Value     | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| `origin`       | The step under which the edge was added. E.g., origin 6 references to edges that were added as river splits by hand. |
+| `quality_h`    | Sum of the quality of the corresponding Heights estimated of the connected nodes. E.g. 0 references that both height estimates were not estimated. |
+| `quality_km`   | Sum of the quality of the corresponding coordinates (X, Y) estimated of the connected nodes. E.g. 0 references that both coordinates were not estimated. |
