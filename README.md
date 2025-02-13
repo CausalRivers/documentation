@@ -92,8 +92,8 @@ Furthermore, both ground truth nodes and edges (**in the graph**) hold additiona
 | Edge Attribute | Description                                                            |
 |:--------------:|------------------------------------------------------------------------|
 | `h_distance`   | elevation change between the two nodes                                 |
-| `km`           | Euclidean distance between the two nodes                               |
-| `quality_km`   | quality of the distance estimation (depends on QX and QY of the nodes) |
+| `geo_distance` | Euclidean distance between the two nodes                               |
+| `quality_geo`  | quality of the distance estimation (depends on QX and QY of the nodes) |
 | `quality_h`    | quality of the elevation estimation (depends on QH of the nodes)       |
 | `origin`       | strategy used to create this edge (see below for further information)  |
 
