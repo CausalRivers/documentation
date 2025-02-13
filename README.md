@@ -31,7 +31,7 @@ To enable processing, please set up the corresponding `Anaconda` environment usi
 [Geographic Locations of the States Of Germany](https://commons.wikimedia.org/wiki/File:States_of_Germany.svg) (Created by [Escondites](https://commons.wikimedia.org/wiki/User:Escondites), [CC BY-SA 2.0 DE](https://creativecommons.org/licenses/by-sa/2.0/de/legalcode"))
 
 | State / Organisation          | Current Progress                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Done |
-|-------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|
+|:-----------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----:|
 | Brandenburg                   | We received a dataset, including labels, with a 15 minute resolution. The data was shared via e-mail correspondence.                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | ✅   |
 | Saxony-Anhalt                 | Manually downloaded from: [Gewässerkundlicher Landesdienst (LHW) Portal](https://gld.lhw-sachsen-anhalt.de).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | ✅   |
 | Saxony                        | Custom written crawler for the API (considering only past 5 years (from 2024 backawrds)). Appropriate licensing conditions were confirmed via e-mail.                                                                                                                                                                                                                                                                                                                                                                                                                                             | ✅   |
@@ -58,7 +58,7 @@ To facilitate matching between these different formats, each graph node shares a
 Additionally, the metadata table contains information about the individual nodes.
 
 | Column Name   | Description                                                                                                                                         |
-|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+|:-------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | `ID`          | Unique ID                                                                                                                                           |
 | `R`           | River name                                                                                                                                          |
 | `X`           | X coordinate of measurement station (longitude)                                                                                                     |
@@ -76,7 +76,7 @@ Additionally, the metadata table contains information about the individual nodes
 Furthermore, both ground truth nodes and edges (**in the graph**) hold additional informations.
 
 | Node Attribute | Description                             |
-|----------------|-----------------------------------------|
+|:--------------:|-----------------------------------------|
 | `p`            | X, Y coordinates                        |
 | `c`            | color for consistency based on origin   |
 | `origin`       | origin of the node                      |
@@ -90,7 +90,7 @@ Furthermore, both ground truth nodes and edges (**in the graph**) hold additiona
 | `QR`           | as above                                |
 
 | Edge Attribute | Description                                                            |
-|----------------|------------------------------------------------------------------------|
+|:--------------:|------------------------------------------------------------------------|
 | `h_distance`   | elevation change between the two nodes                                 |
 | `km`           | Euclidean distance between the two nodes                               |
 | `quality_km`   | quality of the distance estimation (depends on QX and QY of the nodes) |
@@ -104,13 +104,13 @@ To ensure transparency and reliability, we provide quality markers for each piec
 These quality markers are defined as follows:
 
 | Node Value     | Description                                                                 |
-|----------------|-----------------------------------------------------------------------------|
+|:--------------:|-----------------------------------------------------------------------------|
 | `-1`           | Unknown as target value missing                                             |
 | `0`            | Original value                                                              |
 | `> 0`          | Value that was estimated or looked up by hand (Check construction pipeline for more details) |
 
 | Edge Value     | Description                                                                 |
-|----------------|-----------------------------------------------------------------------------|
+|:--------------:|-----------------------------------------------------------------------------|
 | `origin`       | The step under which the edge was added. E.g., origin 6 references to edges that were added as river splits by hand. |
 | `quality_h`    | Sum of the quality of the corresponding Heights estimated of the connected nodes. E.g. 0 references that both height estimates were not estimated. |
 | `quality_km`   | Sum of the quality of the corresponding coordinates (X, Y) estimated of the connected nodes. E.g. 0 references that both coordinates were not estimated. |
