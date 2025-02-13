@@ -27,6 +27,7 @@ To enable processing, please set up the corresponding `Anaconda` environment usi
 ## Current State of the Dataset Contents
 
 ![Map of the 16 German states](https://upload.wikimedia.org/wikipedia/commons/d/d3/States_of_Germany.svg)
+
 [Geographic Locations of the States Of Germany](https://commons.wikimedia.org/wiki/File:States_of_Germany.svg) (Created by [Escondites](https://commons.wikimedia.org/wiki/User:Escondites), [CC BY-SA 2.0 DE](https://creativecommons.org/licenses/by-sa/2.0/de/legalcode"))
 
 | State / Organisation          | Current Progress                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Done |
