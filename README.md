@@ -114,3 +114,24 @@ These quality markers are defined as follows:
 | `origin`       | The step under which the edge was added. E.g., origin 6 references to edges that were added as river splits by hand. |
 | `quality_h`    | Sum of the quality of the corresponding Heights estimated of the connected nodes. E.g. 0 references that both height estimates were not estimated. |
 | `quality_km`   | Sum of the quality of the corresponding coordinates (X, Y) estimated of the connected nodes. E.g. 0 references that both coordinates were not estimated. |
+
+
+
+
+### Alternative naming list :)
+
+
+-  EAstGErmanRivers Dataset (EAGER): Scaling Up Benchmarking For causal discovery from Time Series Data
+-  Streaming Causality: A Real-World Dataset for causal discovery from Time Series Data of East German Rivers
+-  Rivers Run Deep: A Real-World Benchmark for causal discovery from Time Series Data of East German Waterways
+-  Sink or Source: A Real-World Benchmark for causal discovery from Time Series Data of East German River Discharge
+-  CRY ME A RIVER
+-  RIVER DANCE
+-  If you ever need a name for an extension of this paper: The Flow Must Go On: Extending Real-World Benchmarking for causal discovery in Time Series Data to West-German Rivers
+-  TIGRIS: TIme Series Dataset of east-German RIverS
+-  RIVRs: Realistic In-Vivo Rivers
+-  RIVERs: realistic in vivo eastgerman rivers
+-  EAGER: EAst-GErman Rivers
+-  REGEN: Rivers in East-GErmaNy
+-  RIVR-B
+
